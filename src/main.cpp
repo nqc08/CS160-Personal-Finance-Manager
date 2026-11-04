@@ -1,7 +1,8 @@
 #include<iostream>
 #include<string>
-#include "../include/Wallet.h"
 #include "../include/display.h"
+#include "../include/Wallet.h"
+#include "../include/Income.h"
 using namespace std;
 
 int main() {
@@ -41,6 +42,24 @@ int main() {
                     case 2: rename_wallet(walletList); break;
                     case 3: delete_wallet(walletList); break;
                     case 4: display_wallets(walletList); break;
+                }
+            }
+        }
+
+        if(op == 2) {
+            while(true) {
+                displayIncomeSource();
+
+                int opSrc;
+                cout << "Choose your option: "; cin >> opSrc;
+
+                if(opSrc == 0) break;
+
+                switch (opSrc) {
+                    case 1: add_new_source(inSource); break;
+                    case 2: rename_source(inSource); break;
+                    case 3: delete_source(inSource); break;
+                    case 4: display_source(inSource); break;
                 }
             }
         }

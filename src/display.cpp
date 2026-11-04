@@ -9,6 +9,7 @@ void dashboard() {
     cout << "MENU\n";
     cout << "0. EXIT\n";
     cout << "1. Wallet\n";
+    cout << "2. Income Source\n";
     cout << separate;
 }
 
@@ -20,5 +21,16 @@ void displayWallet() {
     cout << "2. Rename a wallet\n";
     cout << "3. Delete a wallet\n";
     cout << "4. Display wallets\n";
+    cout << separate;
+}
+
+void displayIncomeSource() {
+    cout << separate;
+    cout << "Income Source options:\n";
+    cout << "0. Dashboard\n";
+    cout << "1. Create a new source\n";
+    cout << "2. Rename a source\n";
+    cout << "3. Delete a source\n";
+    cout << "4. Display all sources\n";
     cout << separate;
 }

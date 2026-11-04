@@ -8,3 +8,5 @@ extern string separate;
 void dashboard();
 
 void displayWallet();
+
+void displayIncomeSource();
