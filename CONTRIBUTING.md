@@ -9,8 +9,10 @@
 │   ├── RecurringTransaction.h      # Manage recurring transtion and functions
 │   ├── Storage.h                   # Binary File I/O operations
 │   ├── Statistics.h                # Statistics & Reporting calculations
+│   ├── display.h                   # Display format
 └── src/
-│   ├── main.cpp                    # Entry point of the application            
+│   ├── main.cpp                    # Entry point of the application    
+│   ├── display.cpp        
 │   ├── Wallet.cpp                  
 │   ├── Income.cpp                  
 │   ├── Expense.cpp                 
