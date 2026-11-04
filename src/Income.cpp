@@ -93,7 +93,7 @@ void display_source(const DynamicArray<IncomeSource> &inSource) {
     cout << "DISPLAY ALL INCOME SOURCES\n";
 
     if(inSource.size == 0) {
-        cout << "There is no wallet\n";
+        cout << "There is no source\n";
         cout << separate;
         return;
     }
