@@ -7,7 +7,7 @@ using namespace std;
 
 struct Wallet {
     string id, name;
-    double balance;
+    long long balance;
 
     bool operator == (const Wallet &other) const { return id == other.id; }
 };
