@@ -3,8 +3,8 @@
 ├── include/
 │   ├── DynamicArray.h              # Template Dynamic Array (Use pointer) and template<typename>
 │   ├── Wallet.h                    # Manage wallet, wallet list and functions
-│   ├── Income.h                    # Manage income, income source, income transaction and functions
-│   ├── Expense.h                   # Manage expense, expense category, expense transaction and functions
+│   ├── Income.h                    # Manage income, income source, and functions
+│   ├── Expense.h                   # Manage expense, expense category, and functions
 │   ├── Transaction.h               # Manage transactions and functions
 │   ├── RecurringTransaction.h      # Manage recurring transtion and functions
 │   ├── Storage.h                   # Binary File I/O operations
