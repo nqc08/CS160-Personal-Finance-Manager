@@ -38,7 +38,7 @@ void rename_wallet(DynamicArray<Wallet> &walletList) {
         cout << "Input a wallet's Name: "; getline(cin, name);
         if(find_index_by_name(walletList, name) != -1) break;
 
-        cout << "This wallet has not existed yet, please choose another wallet!";
+        cout << "This wallet has not existed yet, please choose another wallet!\n";
     }
     int idx = find_index_by_name(walletList, name);
     
@@ -47,7 +47,7 @@ void rename_wallet(DynamicArray<Wallet> &walletList) {
         cout << "Input a new Name: "; getline(cin, newName);
         if(find_index_by_name(walletList, newName) == -1) break;
 
-        cout << "This Name has existed already, please choose another Name!";
+        cout << "This Name has existed already, please choose another Name!\n";
     }
 
     walletList[idx].name = newName;
@@ -67,8 +67,8 @@ void delete_wallet(DynamicArray<Wallet> &walletList) {
     }
 
     string name;
+    cin.ignore();
     while(true) {
-        cin.ignore(100, '\n');
         cout << "Input the wallet's Name that you want to delete: "; getline(cin, name);
         if(find_index_by_name(walletList, name) != -1) break;
 
