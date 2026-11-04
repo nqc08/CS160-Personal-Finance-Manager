@@ -1,0 +1,33 @@
+# Compiled binaries & object files
+*.exe
+*.o
+*.obj
+*.out
+*.app
+
+# Executables generated during build
+PersonalFinanceManager
+Personal-Finance-Manager
+
+# IDE & Editor configurations
+.vscode/
+.vs/
+.idea/
+*.sln
+*.vcxproj
+*.user
+
+# Operating System temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build directories
+bin/
+build/
+out/
+
+# Local test data
+data/*.dat
+!data/.gitkeep
+
