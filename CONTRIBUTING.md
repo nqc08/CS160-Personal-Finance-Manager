@@ -1,3 +1,4 @@
+ ```
 ├── include/
 │   ├── DynamicArray.h              # Template Dynamic Array (Use pointer)
 │   ├── Wallet.h                    # Manage wallet, wallet list and functions
@@ -19,3 +20,4 @@
 │   ├── Statistics.cpp
 └── CONTRIBUTING.md                 # Structure of the application
 └── README.md                       # Brief description and instructions
+```
