@@ -1,10 +1,33 @@
 #include<iostream>
 #include<string>
 #include "../include/display.h"
+#include "../include/Wallet.h"
 
 string separate = "---------------------------------------------------------------------------------\n";
 
+void clearScreen() {
+    cout << "\033[2J\033[1;1H";
+}
+
+void ENTER(bool needIgnore) {
+    if(needIgnore) cin.ignore(); 
+    cout << "ENTER to continue";
+    cin.get(); 
+}
+
 void dashboard() {
+    cout << separate;
+    cout << "PERSONAL FINANCE MANAGER\n";
+    cout << "Total Balance: " << total_balance(walletList) << '\n';
+    if(walletList.size == 0) {
+        cout << "There is no wallet\n";
+    }
+    else {
+        for(int i = 0; i < walletList.size; i++) {
+            const Wallet &w = walletList[i];
+            cout << i + 1 << ". " << w.name << " (ID: " << w.id << ") - Balance: " << w.balance << '\n';
+        }
+    }
     cout << separate;
     cout << "MENU\n";
     cout << "0. EXIT\n";

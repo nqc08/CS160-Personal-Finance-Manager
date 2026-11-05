@@ -10,3 +10,7 @@ void dashboard();
 void displayWallet();
 
 void displayIncomeSource();
+
+void clearScreen();
+
+void ENTER(bool needIgnore);

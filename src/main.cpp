@@ -6,21 +6,8 @@
 using namespace std;
 
 int main() {
-    cout << separate;
-    cout << "PERSONAL FINANCE MANAGER\n";
-    cout << "Total Balance: " << total_balance(walletList) << '\n';
-    if(walletList.size == 0) {
-        cout << "There is no wallet\n";
-    }
-    else {
-        for(int i = 0; i < walletList.size; i++) {
-            const Wallet &w = walletList[i];
-            cout << i + 1 << ". " << w.name << " (ID: " << w.id << ") - Balance: " << w.balance << '\n';
-        }
-    }
-    cout << separate;
-
     while(true) {
+        clearScreen();
         dashboard();
 
         int op; 
@@ -30,6 +17,7 @@ int main() {
 
         if(op == 1) {
             while(true) {
+                clearScreen();
                 displayWallet();
 
                 int opWallet; 
@@ -38,16 +26,17 @@ int main() {
                 if(opWallet == 0) break;
 
                 switch (opWallet) {
-                    case 1: add_new_wallet(walletList); break;
-                    case 2: rename_wallet(walletList); break;
-                    case 3: delete_wallet(walletList); break;
-                    case 4: display_wallets(walletList); break;
+                    case 1: add_new_wallet(walletList); ENTER(1); break;
+                    case 2: rename_wallet(walletList); ENTER(0); break; // there has been an cin.ignore() already after running this function
+                    case 3: delete_wallet(walletList); ENTER(0); break;
+                    case 4: display_wallets(walletList); ENTER(1); break;
                 }
             }
         }
 
         if(op == 2) {
             while(true) {
+                clearScreen();
                 displayIncomeSource();
 
                 int opSrc;
@@ -56,10 +45,10 @@ int main() {
                 if(opSrc == 0) break;
 
                 switch (opSrc) {
-                    case 1: add_new_source(inSource); break;
-                    case 2: rename_source(inSource); break;
-                    case 3: delete_source(inSource); break;
-                    case 4: display_source(inSource); break;
+                    case 1: add_new_source(inSource); ENTER(0); break; // there has been an cin.ignore() already after running this function
+                    case 2: rename_source(inSource); ENTER(0); break; 
+                    case 3: delete_source(inSource); ENTER(0); break;
+                    case 4: display_source(inSource); ENTER(1); break;
                 }
             }
         }
