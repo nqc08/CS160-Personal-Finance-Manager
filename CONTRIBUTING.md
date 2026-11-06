@@ -1,5 +1,5 @@
- ```
-├── Personal_Finance_Manager/
+```text
+Personal_Finance_Manager/
 ├── include/
 │   ├── DynamicArray.h              # Template Dynamic Array (Use pointer) and template<typename>
 │   ├── Wallet.h                    # Manage wallet, wallet list and functions
