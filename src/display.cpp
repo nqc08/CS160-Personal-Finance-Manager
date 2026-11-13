@@ -33,10 +33,11 @@ void dashboard() {
     cout << "0. EXIT\n";
     cout << "1. Wallet\n";
     cout << "2. Income Source\n";
+    cout << "3. Expense Category\n";
     cout << separate;
 }
 
-void displayWallet() {
+void menuWallet() {
     cout << separate;
     cout << "Wallet options:\n";
     cout << "0. Dashboard\n";
@@ -47,7 +48,7 @@ void displayWallet() {
     cout << separate;
 }
 
-void displayIncomeSource() {
+void menuIncomeSource() {
     cout << separate;
     cout << "Income Source options:\n";
     cout << "0. Dashboard\n";
@@ -55,5 +56,16 @@ void displayIncomeSource() {
     cout << "2. Rename a source\n";
     cout << "3. Delete a source\n";
     cout << "4. Display all sources\n";
+    cout << separate;
+}
+
+void menuExpenseCategory() {
+    cout << separate;
+    cout << "Expense Category options:\n";
+    cout << "0. Dashboard\n";
+    cout << "1. Create a new category\n";
+    cout << "2. Rename a category\n";
+    cout << "3. Delete a category\n";
+    cout << "4. Display all categories\n";
     cout << separate;
 }

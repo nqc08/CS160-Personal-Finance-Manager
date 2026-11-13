@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DYNAMIC_ARRAY_H
+#define DYNAMIC_ARRAY_H
 
 template<typename T>
 class DynamicArray {
@@ -35,3 +36,5 @@ public:
     T& operator[] (int idx) { return data[idx]; }
     const T& operator[] (int idx) const { return data[idx]; }
 };
+
+#endif

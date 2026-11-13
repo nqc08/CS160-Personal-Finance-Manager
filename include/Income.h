@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INCOME_H
+#define INCOME_H
 
 #include<string>
 #include "DynamicArray.h"
@@ -19,3 +20,5 @@ void delete_source(DynamicArray<IncomeSource> &inSource);
 int find_index_by_name(DynamicArray<IncomeSource> &inSource, const string &name);
 
 void display_source(const DynamicArray<IncomeSource> &inSource);
+
+#endif

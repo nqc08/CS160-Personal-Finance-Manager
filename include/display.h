@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
 #include<string>
 using namespace std;
@@ -7,10 +8,14 @@ extern string separate;
 
 void dashboard();
 
-void displayWallet();
+void menuWallet();
 
-void displayIncomeSource();
+void menuIncomeSource();
+
+void menuExpenseCategory();
 
 void clearScreen();
 
 void ENTER(bool needIgnore);
+
+#endif

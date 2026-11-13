@@ -1,6 +1,6 @@
-#pragma once
+#ifndef WALLET_H
+#define WALLET_H
 
-#include<iostream>
 #include<string>
 #include "DynamicArray.h"
 using namespace std;
@@ -25,3 +25,5 @@ int find_index_by_name(DynamicArray<Wallet> &walletList, const string &name);
 void display_wallets(const DynamicArray<Wallet> &walletList);
 
 long long total_balance(const DynamicArray<Wallet> &walletList);
+
+#endif

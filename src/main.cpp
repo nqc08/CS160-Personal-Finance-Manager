@@ -3,6 +3,7 @@
 #include "../include/display.h"
 #include "../include/Wallet.h"
 #include "../include/Income.h"
+#include "../include/Expense.h"
 using namespace std;
 
 int main() {
@@ -18,7 +19,7 @@ int main() {
         if(op == 1) {
             while(true) {
                 clearScreen();
-                displayWallet();
+                menuWallet();
 
                 int opWallet; 
                 cout << "Choose your option: "; cin >> opWallet;
@@ -37,7 +38,7 @@ int main() {
         if(op == 2) {
             while(true) {
                 clearScreen();
-                displayIncomeSource();
+                menuIncomeSource();
 
                 int opSrc;
                 cout << "Choose your option: "; cin >> opSrc;
@@ -49,6 +50,25 @@ int main() {
                     case 2: rename_source(inSource); ENTER(0); break; 
                     case 3: delete_source(inSource); ENTER(0); break;
                     case 4: display_source(inSource); ENTER(1); break;
+                }
+            }
+        }
+
+        if(op == 3) {
+            while(true) {
+                clearScreen();
+                menuExpenseCategory();
+
+                int opCate;
+                cout << "Choose your option: "; cin >> opCate;
+
+                if(opCate == 0) break;
+
+                switch (opCate) {
+                    case 1: add_new_category(expCategory); ENTER(0); break; 
+                    case 2: rename_category(expCategory); ENTER(0); break; 
+                    case 3: delete_category(expCategory); ENTER(0); break;
+                    case 4: display_category(expCategory); ENTER(1); break;
                 }
             }
         }
