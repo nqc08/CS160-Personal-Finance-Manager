@@ -35,6 +35,21 @@ public:
 
     T& operator[] (int idx) { return data[idx]; }
     const T& operator[] (int idx) const { return data[idx]; }
+
+    void swap(DynamicArray<T>& other) noexcept {
+
+        T* tempData = data;
+        data = other.data;
+        other.data = tempData;
+
+        int tempSize = size;
+        size = other.size;
+        other.size = tempSize;
+
+        int tempCap = cap;
+        cap = other.cap;
+        other.cap = tempCap;
+    }
 };
 
 #endif
