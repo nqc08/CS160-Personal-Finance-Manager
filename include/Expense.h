@@ -1,8 +1,9 @@
 #ifndef EXPENSE_H
 #define EXPENSE_H
 
-#include<string>
 #include "DynamicArray.h"
+
+#include<string>
 using namespace std;
 
 struct ExpenseCategory {
@@ -18,6 +19,8 @@ void rename_category(DynamicArray<ExpenseCategory> &expCategory);
 void delete_category(DynamicArray<ExpenseCategory> &expCategory);
 
 int find_index_by_name(DynamicArray<ExpenseCategory> &expCategory, const string &name);
+
+int find_index_by_ID(DynamicArray<ExpenseCategory> &expCategory, const string &id);
 
 void display_category(const DynamicArray<ExpenseCategory> &expCategory);
 

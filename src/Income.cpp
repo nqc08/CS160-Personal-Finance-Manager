@@ -1,13 +1,15 @@
-#include<iostream>
-#include<string>
 #include "../include/Income.h"
 #include "../include/DynamicArray.h"
 #include "../include/display.h"
+
+#include<iostream>
+#include<string>
 using namespace std;
 
 DynamicArray<IncomeSource> inSource;
 
 void add_new_source(DynamicArray<IncomeSource> &inSource) {
+    clearScreen();
     cout << separate;
     cout << "CREATE A NEW INCOME SOURCE\n";
 
@@ -28,6 +30,7 @@ void add_new_source(DynamicArray<IncomeSource> &inSource) {
 }
 
 void rename_source(DynamicArray<IncomeSource> &inSource) {
+    clearScreen();
     cout << separate;
     cout << "RENAME AN INCOME SOURCE\n";
 
@@ -56,6 +59,7 @@ void rename_source(DynamicArray<IncomeSource> &inSource) {
 }
 
 void delete_source(DynamicArray<IncomeSource> &inSource) {
+    clearScreen();
     cout << separate;
     cout << "DELETE AN INCOME SOURCE\n";
 
@@ -88,7 +92,15 @@ int find_index_by_name(DynamicArray<IncomeSource> &inSource, const string &name)
     return -1;
 }
 
+int find_index_by_ID(DynamicArray<IncomeSource> &inSource, const string &id) {
+    for(int i = 0; i < inSource.size; i++) {
+        if(inSource[i].id == id) return i;
+    }
+    return -1;
+}
+
 void display_source(const DynamicArray<IncomeSource> &inSource) {
+    clearScreen();
     cout << separate;
     cout << "DISPLAY ALL INCOME SOURCES\n";
 

@@ -10,7 +10,7 @@ public:
     DynamicArray(int initCap = 4) : size(0), cap(initCap) { data = new T[cap]; }
     ~DynamicArray() { delete[] data; }
 
-    void resize(int newCap) {
+    void expand(int newCap) {
         T *newData = new T[newCap];
         for(int i = 0; i < size; i++) {
             newData[i] = data[i];
@@ -21,7 +21,7 @@ public:
     }
 
     void push_back(const T &item) {
-        if(size >= cap) resize(cap * 2);
+        if(size >= cap) expand(cap * 2);
         data[size++] = item;
     }
 

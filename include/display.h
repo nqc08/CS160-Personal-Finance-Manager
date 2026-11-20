@@ -14,6 +14,8 @@ void menuIncomeSource();
 
 void menuExpenseCategory();
 
+void menuTransaction();
+
 void clearScreen();
 
 void ENTER(bool needIgnore);

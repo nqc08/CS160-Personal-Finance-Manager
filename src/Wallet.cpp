@@ -1,13 +1,15 @@
-#include<iostream>
-#include<string>
 #include "../include/Wallet.h"
 #include "../include/DynamicArray.h"
 #include "../include/display.h"
+
+#include<iostream>
+#include<string>
 using namespace std;
 
 DynamicArray<Wallet> walletList;
 
 void add_new_wallet(DynamicArray<Wallet> &walletList) {
+    clearScreen();
     cout << separate;
     cout << "CREATE A NEW WALLET\n";
 
@@ -29,6 +31,7 @@ void add_new_wallet(DynamicArray<Wallet> &walletList) {
 }
 
 void rename_wallet(DynamicArray<Wallet> &walletList) {
+    clearScreen();
     cout << separate;
     cout << "RENAME A WALLET\n";
 
@@ -57,6 +60,7 @@ void rename_wallet(DynamicArray<Wallet> &walletList) {
 }
 
 void delete_wallet(DynamicArray<Wallet> &walletList) {
+    clearScreen();
     cout << separate;
     cout << "DELETE A WALLET\n";
 
@@ -89,7 +93,15 @@ int find_index_by_name(DynamicArray<Wallet> &walletList, const string &name) {
     return -1;
 }
 
+int find_index_by_ID(DynamicArray<Wallet> &walletList, const string &id) {
+    for(int i = 0; i < walletList.size; i++) {
+        if(walletList[i].id == id) return i;
+    }
+    return -1;
+}
+
 void display_wallets(const DynamicArray<Wallet> &walletList) {
+    clearScreen();
     cout << separate;
     cout << "DISPLAY ALL WALLETS\n";
 

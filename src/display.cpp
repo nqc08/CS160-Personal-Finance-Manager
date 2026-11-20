@@ -1,12 +1,14 @@
-#include<iostream>
-#include<string>
 #include "../include/display.h"
 #include "../include/Wallet.h"
+
+#include<iostream>
+#include<string>
+using namespace std;
 
 string separate = "---------------------------------------------------------------------------------\n";
 
 void clearScreen() {
-    cout << "\033[2J\033[1;1H";
+    cout << "\033[2J\033[3J\033[1;1H";
 }
 
 void ENTER(bool needIgnore) {
@@ -16,6 +18,7 @@ void ENTER(bool needIgnore) {
 }
 
 void dashboard() {
+    clearScreen();
     cout << separate;
     cout << "PERSONAL FINANCE MANAGER\n";
     cout << "Total Balance: " << total_balance(walletList) << '\n';
@@ -34,10 +37,12 @@ void dashboard() {
     cout << "1. Wallet\n";
     cout << "2. Income Source\n";
     cout << "3. Expense Category\n";
+    cout << "4. Transaction\n";
     cout << separate;
 }
 
 void menuWallet() {
+    clearScreen();
     cout << separate;
     cout << "Wallet options:\n";
     cout << "0. Dashboard\n";
@@ -49,6 +54,7 @@ void menuWallet() {
 }
 
 void menuIncomeSource() {
+    clearScreen();
     cout << separate;
     cout << "Income Source options:\n";
     cout << "0. Dashboard\n";
@@ -60,6 +66,7 @@ void menuIncomeSource() {
 }
 
 void menuExpenseCategory() {
+    clearScreen();
     cout << separate;
     cout << "Expense Category options:\n";
     cout << "0. Dashboard\n";
@@ -67,5 +74,15 @@ void menuExpenseCategory() {
     cout << "2. Rename a category\n";
     cout << "3. Delete a category\n";
     cout << "4. Display all categories\n";
+    cout << separate;
+}
+
+void menuTransaction() {
+    clearScreen();
+    cout << separate;
+    cout << "Transaction options:\n";
+    cout << "0. Dashboard\n";
+    cout << "1. Add a new transaction\n";
+    cout << "2. Show transaction history\n";
     cout << separate;
 }

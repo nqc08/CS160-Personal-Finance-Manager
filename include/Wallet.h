@@ -1,8 +1,9 @@
 #ifndef WALLET_H
 #define WALLET_H
 
-#include<string>
 #include "DynamicArray.h"
+
+#include<string>
 using namespace std;
 
 struct Wallet {
@@ -21,6 +22,8 @@ void rename_wallet(DynamicArray<Wallet> &walletList);
 void delete_wallet(DynamicArray<Wallet> &walletList);
 
 int find_index_by_name(DynamicArray<Wallet> &walletList, const string &name);
+
+int find_index_by_ID(DynamicArray<Wallet> &walletList, const string &id);
 
 void display_wallets(const DynamicArray<Wallet> &walletList);
 

@@ -1,14 +1,15 @@
-#include<iostream>
-#include<string>
 #include "../include/display.h"
 #include "../include/Wallet.h"
 #include "../include/Income.h"
 #include "../include/Expense.h"
+#include "../include/Transaction.h"
+
+#include<iostream>
+#include<string>
 using namespace std;
 
 int main() {
     while(true) {
-        clearScreen();
         dashboard();
 
         int op; 
@@ -18,7 +19,6 @@ int main() {
 
         if(op == 1) {
             while(true) {
-                clearScreen();
                 menuWallet();
 
                 int opWallet; 
@@ -37,7 +37,6 @@ int main() {
 
         if(op == 2) {
             while(true) {
-                clearScreen();
                 menuIncomeSource();
 
                 int opSrc;
@@ -56,7 +55,6 @@ int main() {
 
         if(op == 3) {
             while(true) {
-                clearScreen();
                 menuExpenseCategory();
 
                 int opCate;
@@ -69,6 +67,22 @@ int main() {
                     case 2: rename_category(expCategory); ENTER(0); break; 
                     case 3: delete_category(expCategory); ENTER(0); break;
                     case 4: display_category(expCategory); ENTER(1); break;
+                }
+            }
+        }
+
+        if(op == 4) {
+            while(true) {
+                menuTransaction();
+
+                int opTrans;
+                cout << "Choose your option: "; cin >> opTrans;
+
+                if(opTrans == 0) break;
+
+                switch (opTrans) {
+                    case 1: add_new_transaction(transList); ENTER(0); break;
+                    case 2: show_transaction_history(transList); ENTER(1); break;
                 }
             }
         }

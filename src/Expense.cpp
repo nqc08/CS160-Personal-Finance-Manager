@@ -1,13 +1,15 @@
-#include<iostream>
-#include<string>
 #include "../include/Expense.h"
 #include "../include/DynamicArray.h"
 #include "../include/display.h"
+
+#include<iostream>
+#include<string>
 using namespace std;
 
 DynamicArray<ExpenseCategory> expCategory;
 
 void add_new_category(DynamicArray<ExpenseCategory> &expCategory) {
+    clearScreen();
     cout << separate;
     cout << "CREATE A NEW EXPENSE CATEGORY\n";
 
@@ -28,6 +30,7 @@ void add_new_category(DynamicArray<ExpenseCategory> &expCategory) {
 }
 
 void rename_category(DynamicArray<ExpenseCategory> &expCategory) {
+    clearScreen();
     cout << separate;
     cout << "RENAME AN EXPENSE CATEGORY\n";
 
@@ -56,6 +59,7 @@ void rename_category(DynamicArray<ExpenseCategory> &expCategory) {
 }
 
 void delete_category(DynamicArray<ExpenseCategory> &expCategory) {
+    clearScreen();
     cout << separate;
     cout << "DELETE AN EXPENSE CATEGORY\n";
 
@@ -88,7 +92,15 @@ int find_index_by_name(DynamicArray<ExpenseCategory> &expCategory, const string 
     return -1;
 }
 
+int find_index_by_ID(DynamicArray<ExpenseCategory> &expCategory, const string &id) {
+    for(int i = 0; i < expCategory.size; i++) {
+        if(expCategory[i].id == id) return i;
+    }
+    return -1;
+}
+
 void display_category(const DynamicArray<ExpenseCategory> &expCategory) {
+    clearScreen();
     cout << separate;
     cout << "DISPLAY ALL EXPENSE CATEGORIES\n";
 
