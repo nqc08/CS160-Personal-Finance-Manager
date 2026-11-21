@@ -40,7 +40,7 @@ void add_new_transaction(DynamicArray<Transaction> &) {
 
 Transaction create_Income_Transaction() {
     cout << separate;
-    Transaction t;
+    Transaction t{};
     cout << "Input the date (dd mm yyyy): "; cin >> t.date.d >> t.date.m >> t.date.y;
 
     t.isIncome = true;
@@ -75,7 +75,7 @@ Transaction create_Income_Transaction() {
 
 Transaction create_Expense_Transaction() {
     cout << separate;
-    Transaction t;
+    Transaction t{};
     cout << "Input the date (dd mm yyyy): "; cin >> t.date.d >> t.date.m >> t.date.y;
 
     t.isIncome = false;

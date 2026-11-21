@@ -38,6 +38,7 @@ void dashboard() {
     cout << "2. Income Source\n";
     cout << "3. Expense Category\n";
     cout << "4. Transaction\n";
+    cout << "5. Recurring Transactions\n";
     cout << separate;
 }
 

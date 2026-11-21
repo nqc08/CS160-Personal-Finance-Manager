@@ -5,6 +5,8 @@
 #include "../include/Expense.h"
 #include "../include/Transaction.h"
 #include "../include/Storage.h"
+#include "../include/RecurringTransaction.h"
+#include <limits>
 
 #include<iostream>
 #include<string>
@@ -14,7 +16,9 @@ int main() {
     LoadStatus status = loadData(
         walletList,
         inSource,
-        expCategory
+        expCategory,
+        transList,
+        recurringList
     );
 
     switch (status) {
@@ -40,7 +44,9 @@ int main() {
         if (!saveData(
             walletList,
             inSource,
-            expCategory
+            expCategory,
+            transList,
+            recurringList
         )) {
             cerr << "Warning: Failed to save data!\n";
             return false;
@@ -49,11 +55,25 @@ int main() {
         return true;
     };
 
+    int generated = process_recurring_transactions(current_date());
+    // Persist transactions and monthly markers together before accepting more input.
+    if (generated > 0) {
+        if (!saveCurrentData()) return 1;
+        cout << "Created " << generated << " recurring transaction(s).\n";
+        ENTER(0);
+    }
+
     while(true) {
         dashboard();
 
         int op; 
-        cout << "Choose your option: "; cin >> op;
+        cout << "Choose your option: ";
+        if (!(cin >> op)) {
+            if (cin.eof()) break;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
+        }
         
         if(op == 0) break;
 
@@ -166,10 +186,21 @@ int main() {
                 if(opTrans == 0) break;
 
                 switch (opTrans) {
-                    case 1: add_new_transaction(transList); ENTER(0); break;
+                    case 1:
+                        add_new_transaction(transList);
+                        if (!saveCurrentData()) return 1;
+                        ENTER(0);
+                        break;
                     case 2: show_transaction_history(transList); ENTER(1); break;
                 }
             }
+        }
+        if (op == 5) {
+            recurring_menu();
+            int added = process_recurring_transactions(current_date());
+            if (!saveCurrentData()) return 1;
+            if (added > 0) cout << "Created " << added << " recurring transaction(s).\n";
+            ENTER(1);
         }
     }
 

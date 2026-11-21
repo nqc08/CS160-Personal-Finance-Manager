@@ -2,6 +2,9 @@
 #include "Wallet.h"
 #include "Income.h"
 #include "Expense.h"
+#include "Storage.h"
+#include <fstream>
+#include <cstdint>
 #include <cassert>
 #include <iostream>
 
@@ -83,5 +86,40 @@ int main() {
     assert(process_recurring_transactions(Date(1, 2, 2027)) == 1);
     assert(process_recurring_transactions(Date(1, 5, 2027)) == 1); // No backfill.
     assert(process_recurring_transactions(Date(1, 5, 2027)) == 0);
-    std::cout << "Recurring logic checks passed.\n";
+    // Save and reload all lists. Loading must not apply balances a second time.
+    const int savedTransactions = transList.size;
+    const long long savedBalance = walletList[0].balance;
+    assert(saveData(walletList, inSource, expCategory, transList, recurringList));
+    walletList.size = inSource.size = expCategory.size = transList.size = recurringList.size = 0;
+    assert(loadData(walletList, inSource, expCategory, transList, recurringList) == LoadStatus::SUCCESS);
+    assert(walletList.size == 1 && inSource.size == 1 && expCategory.size == 1);
+    assert(recurringList.size == 2 && transList.size == savedTransactions);
+    assert(walletList[0].balance == savedBalance);
+    assert(recurringList[0].transaction.note == "Monthly test");
+    assert(!recurringList[0].hasEndDate && recurringList[1].hasEndDate);
+    assert(process_recurring_transactions(Date(2, 5, 2027)) == 0);
+    assert(process_recurring_transactions(Date(1, 6, 2027)) == 1);
+    assert(transList.size == savedTransactions + 1);
+
+    // A truncated file is rejected without changing the current in-memory data.
+    {
+        std::ofstream bad("data/finance.dat", std::ios::binary | std::ios::trunc);
+        bad << "PFM";
+    }
+    assert(loadData(walletList, inSource, expCategory, transList, recurringList) == LoadStatus::INVALID_FILE);
+    assert(transList.size == savedTransactions + 1 && recurringList.size == 2);
+
+    // Old version 1 saves remain readable (no transaction/recurring sections).
+    {
+        std::ofstream old("data/finance.dat", std::ios::binary | std::ios::trunc);
+        old.write("PFMDATA1", 8);
+        std::uint32_t version = 1, empty = 0;
+        old.write(reinterpret_cast<const char*>(&version), sizeof(version));
+        for (int i = 0; i < 3; i++) old.write(reinterpret_cast<const char*>(&empty), sizeof(empty));
+    }
+    assert(loadData(walletList, inSource, expCategory, transList, recurringList) == LoadStatus::SUCCESS);
+    assert(walletList.size == 0 && transList.size == 0 && recurringList.size == 0);
+    assert(saveData(walletList, inSource, expCategory, transList, recurringList));
+    assert(loadData(walletList, inSource, expCategory, transList, recurringList) == LoadStatus::SUCCESS);
+    std::cout << "Recurring logic and storage checks passed.\n";
 }
