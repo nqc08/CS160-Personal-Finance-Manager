@@ -130,7 +130,7 @@ bool readExpenseCategory(std::ifstream& in, ExpenseCategory& category) {
 const std::uint32_t MAX_ITEMS = 100000;
 
 bool writeCount(std::ofstream& out, int count) {
-    if (count < 0 || count > MAX_ITEMS) return false;
+    if (count < 0 || static_cast<std::uint32_t>(count) > MAX_ITEMS) return false;
 
     std::uint32_t value = static_cast<std::uint32_t>(count);
 
@@ -155,10 +155,75 @@ bool readCount(std::ifstream& in, std::uint32_t& count) {
     return true;
 }
 
+// Dates and strings are written field by field, never as a raw struct.
+bool writeDate(std::ofstream& out, const Date& date) {
+    out.write(reinterpret_cast<const char*>(&date.d), sizeof(date.d));
+    out.write(reinterpret_cast<const char*>(&date.m), sizeof(date.m));
+    out.write(reinterpret_cast<const char*>(&date.y), sizeof(date.y));
+    return static_cast<bool>(out);
+}
+
+bool readDate(std::ifstream& in, Date& date) {
+    in.read(reinterpret_cast<char*>(&date.d), sizeof(date.d));
+    in.read(reinterpret_cast<char*>(&date.m), sizeof(date.m));
+    in.read(reinterpret_cast<char*>(&date.y), sizeof(date.y));
+    return static_cast<bool>(in);
+}
+
+bool writeTransaction(std::ofstream& out, const Transaction& t) {
+    int type = t.isIncome ? 1 : 0;
+    if (!writeDate(out, t.date)) return false;
+    out.write(reinterpret_cast<const char*>(&type), sizeof(type));
+    if (!writeString(out, t.srcID) || !writeString(out, t.walletID) || !writeString(out, t.note)) return false;
+    out.write(reinterpret_cast<const char*>(&t.amount), sizeof(t.amount));
+    return static_cast<bool>(out);
+}
+
+bool readTransaction(std::ifstream& in, Transaction& t) {
+    int type = -1;
+    if (!readDate(in, t.date)) return false;
+    in.read(reinterpret_cast<char*>(&type), sizeof(type));
+    if (!in || (type != 0 && type != 1)) return false;
+    t.isIncome = type == 1;
+    if (!readString(in, t.srcID) || !readString(in, t.walletID) || !readString(in, t.note)) return false;
+    in.read(reinterpret_cast<char*>(&t.amount), sizeof(t.amount));
+    return in && t.amount > 0 && is_valid_date(t.date);
+}
+
+bool writeRecurring(std::ofstream& out, const RecurringTransaction& r) {
+    // Give the template a valid date in the file; generation uses today's date.
+    Transaction t = r.transaction;
+    t.date = r.startDate;
+    if (!writeString(out, r.id) || !writeTransaction(out, t)) return false;
+    if (!writeDate(out, r.startDate) || !writeDate(out, r.endDate)) return false;
+    int hasEnd = r.hasEndDate ? 1 : 0;
+    out.write(reinterpret_cast<const char*>(&hasEnd), sizeof(hasEnd));
+    out.write(reinterpret_cast<const char*>(&r.lastGeneratedMonth), sizeof(r.lastGeneratedMonth));
+    out.write(reinterpret_cast<const char*>(&r.lastGeneratedYear), sizeof(r.lastGeneratedYear));
+    return static_cast<bool>(out);
+}
+
+bool readRecurring(std::ifstream& in, RecurringTransaction& r) {
+    if (!readString(in, r.id) || !readTransaction(in, r.transaction)) return false;
+    if (!readDate(in, r.startDate) || !readDate(in, r.endDate)) return false;
+    int hasEnd = -1;
+    in.read(reinterpret_cast<char*>(&hasEnd), sizeof(hasEnd));
+    in.read(reinterpret_cast<char*>(&r.lastGeneratedMonth), sizeof(r.lastGeneratedMonth));
+    in.read(reinterpret_cast<char*>(&r.lastGeneratedYear), sizeof(r.lastGeneratedYear));
+    if (!in || (hasEnd != 0 && hasEnd != 1) || r.id.empty() || !is_valid_date(r.startDate)) return false;
+    r.hasEndDate = hasEnd == 1;
+    if (r.hasEndDate && (!is_valid_date(r.endDate) || compare_dates(r.endDate, r.startDate) < 0)) return false;
+    bool neverGenerated = r.lastGeneratedMonth == 0 && r.lastGeneratedYear == 0;
+    bool validMonth = r.lastGeneratedMonth >= 1 && r.lastGeneratedMonth <= 12 && r.lastGeneratedYear >= 1;
+    return neverGenerated || validMonth;
+}
+
 bool saveData(
     const DynamicArray<Wallet>& wallets,
     const DynamicArray<IncomeSource>& sources,
-    const DynamicArray<ExpenseCategory>& categories
+    const DynamicArray<ExpenseCategory>& categories,
+    const DynamicArray<Transaction>& transactions,
+    const DynamicArray<RecurringTransaction>& recurring
 ) {
     const fs::path tempPath = "data/finance.tmp";
     const fs::path finalPath = "data/finance.dat";
@@ -175,7 +240,7 @@ bool saveData(
 
     const char magic[8] = {'P', 'F', 'M', 'D', 'A', 'T', 'A', '1'};
     out.write(magic, sizeof(magic));
-    const std::uint32_t version = 1;
+    const std::uint32_t version = 2;
     out.write(
         reinterpret_cast<const char*>(&version),
         sizeof(version)
@@ -195,6 +260,15 @@ bool saveData(
     if (!writeCount(out, categories.size)) return fail();
     for (int i{}; i < categories.size; i++) {
         if (!writeExpenseCategory(out, categories[i])) return fail();
+    }
+
+    if (!writeCount(out, transactions.size)) return fail();
+    for (int i = 0; i < transactions.size; i++) {
+        if (!writeTransaction(out, transactions[i])) return fail();
+    }
+    if (!writeCount(out, recurring.size)) return fail();
+    for (int i = 0; i < recurring.size; i++) {
+        if (!writeRecurring(out, recurring[i])) return fail();
     }
 
     out.flush();
@@ -226,7 +300,9 @@ bool saveData(
 LoadStatus loadData(
     DynamicArray<Wallet>& wallets,
     DynamicArray<IncomeSource>& sources,
-    DynamicArray<ExpenseCategory>& categories
+    DynamicArray<ExpenseCategory>& categories,
+    DynamicArray<Transaction>& transactions,
+    DynamicArray<RecurringTransaction>& recurring
 ) {
     const fs::path dataDir = "data";
     const fs::path filePath = dataDir / "finance.dat";
@@ -259,6 +335,8 @@ LoadStatus loadData(
     DynamicArray<Wallet> tempWallets;
     DynamicArray<IncomeSource> tempSources;
     DynamicArray<ExpenseCategory> tempCategories;
+    DynamicArray<Transaction> tempTransactions;
+    DynamicArray<RecurringTransaction> tempRecurring;
 
     auto fail = [&]() -> LoadStatus {
         return LoadStatus::INVALID_FILE;
@@ -278,7 +356,7 @@ LoadStatus loadData(
         sizeof(version)
     );
 
-    if (!in || version != 1) return fail();
+    if (!in || (version != 1 && version != 2)) return fail();
 
     std::uint32_t count{};
 
@@ -303,6 +381,25 @@ LoadStatus loadData(
         tempCategories.push_back(category);
     }
 
+    // Version 1 files contain only wallets, sources, and categories.
+    if (version == 2) {
+        if (!readCount(in, count)) return fail();
+        for (std::uint32_t i = 0; i < count; i++) {
+            Transaction t;
+            if (!readTransaction(in, t)) return fail();
+            tempTransactions.push_back(t);
+        }
+        if (!readCount(in, count)) return fail();
+        for (std::uint32_t i = 0; i < count; i++) {
+            RecurringTransaction r;
+            if (!readRecurring(in, r)) return fail();
+            for (int j = 0; j < tempRecurring.size; j++) {
+                if (tempRecurring[j].id == r.id) return fail();
+            }
+            tempRecurring.push_back(r);
+        }
+    }
+
     if (in.peek() != std::ifstream::traits_type::eof()) return fail();
 
     if (in.bad()) return fail();
@@ -310,6 +407,8 @@ LoadStatus loadData(
     wallets.swap(tempWallets);
     sources.swap(tempSources);
     categories.swap(tempCategories);
+    transactions.swap(tempTransactions);
+    recurring.swap(tempRecurring);
 
     return LoadStatus::SUCCESS;
 }

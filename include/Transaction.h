@@ -8,7 +8,7 @@ using namespace std;
 
 struct Date {
     int d, m, y;
-    Date() {}
+    Date() : d(0), m(0), y(0) {}
     Date(int d, int m, int y) : d(d), m(m), y(y) {}
 };  
 struct Transaction {
@@ -19,6 +19,10 @@ struct Transaction {
 };
 
 extern DynamicArray<Transaction> transList;
+
+bool is_valid_date(const Date &date);
+int compare_dates(const Date &a, const Date &b);
+bool record_transaction(const Transaction &transaction, DynamicArray<Transaction> &transactions);
 
 void add_new_transaction(DynamicArray<Transaction> &transList);
 

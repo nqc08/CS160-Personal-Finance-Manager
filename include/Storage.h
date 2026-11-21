@@ -5,6 +5,7 @@
 #include "Income.h"
 #include "Expense.h"
 #include "DynamicArray.h"
+#include "RecurringTransaction.h"
 
 enum class LoadStatus {
     SUCCESS,
@@ -16,13 +17,17 @@ enum class LoadStatus {
 bool saveData(
     const DynamicArray<Wallet>& wallets,
     const DynamicArray<IncomeSource>& sources,
-    const DynamicArray<ExpenseCategory>& categories
+    const DynamicArray<ExpenseCategory>& categories,
+    const DynamicArray<Transaction>& transactions,
+    const DynamicArray<RecurringTransaction>& recurring
 );
 
 LoadStatus loadData(
     DynamicArray<Wallet>& wallets,
     DynamicArray<IncomeSource>& sources,
-    DynamicArray<ExpenseCategory>& categories
+    DynamicArray<ExpenseCategory>& categories,
+    DynamicArray<Transaction>& transactions,
+    DynamicArray<RecurringTransaction>& recurring
 );
 
 #endif
