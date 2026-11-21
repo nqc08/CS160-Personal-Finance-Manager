@@ -53,4 +53,16 @@ with tempfile.TemporaryDirectory(prefix='pfm-recurring-') as temporary:
     assert output.count('Normal income') == 1
     assert output.count('Monthly pay') == 1
     assert 'Total Balance: 1125' in output
-    print('CLI creation, restart, history, and duplicate-prevention checks passed.')
+    startup = folder / 'startup'
+    (startup / 'data').mkdir(parents=True)
+    subprocess.run([str(tests), '--seed-startup'], cwd=startup, check=True)
+    output = subprocess.run([str(app)], cwd=startup, input='\n4\n2\n\n0\n0\n',
+                            text=True, capture_output=True, timeout=10, check=True).stdout
+    assert 'Created 1 recurring transaction(s).' in output
+    assert output.count('Monthly test') == 1
+    assert 'Total Balance: 1100' in output
+    output = subprocess.run([str(app)], cwd=startup, input='0\n', text=True,
+                            capture_output=True, timeout=10, check=True).stdout
+    assert 'Created 1 recurring transaction(s).' not in output
+    assert 'Total Balance: 1100' in output
+    print('CLI creation, startup generation, restart, history, and duplicate-prevention checks passed.')

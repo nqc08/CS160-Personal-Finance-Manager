@@ -20,7 +20,7 @@ RecurringTransaction make_record(const string &id, bool income) {
     return r;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     Wallet w; w.id = "W1"; w.name = "Cash"; w.balance = 1000;
     walletList.push_back(w);
     IncomeSource s; s.id = "S1"; s.name = "Salary"; inSource.push_back(s);
@@ -32,6 +32,15 @@ int main() {
     assert(!is_valid_date(Date(1, 13, 2026)));
     assert(!is_valid_date(Date(0, 1, 2026)));
     assert(compare_dates(Date(31, 12, 2026), Date(1, 1, 2027)) < 0);
+
+    // Seed an unprocessed record to exercise the real application's startup path.
+    if (argc == 2 && string(argv[1]) == "--seed-startup") {
+        RecurringTransaction pending = make_record("startup", true);
+        pending.startDate = Date(1, 1, 2020);
+        assert(add_recurring_transaction(pending));
+        assert(saveData(walletList, inSource, expCategory, transList, recurringList));
+        return 0;
+    }
 
     RecurringTransaction income = make_record("R1", true);
     assert(add_recurring_transaction(income));

@@ -44,7 +44,7 @@ int process_recurring_transactions(const Date &today) {
         Transaction t = r.transaction;
         t.date = today;
         // Missing wallets or sources/categories are skipped without marking the month.
-        if (record_transaction(t)) {
+        if (record_transaction(t, transList)) {
             r.lastGeneratedMonth = today.m;
             r.lastGeneratedYear = today.y;
             generated++;

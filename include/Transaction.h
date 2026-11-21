@@ -22,7 +22,7 @@ extern DynamicArray<Transaction> transList;
 
 bool is_valid_date(const Date &date);
 int compare_dates(const Date &a, const Date &b);
-bool record_transaction(const Transaction &transaction);
+bool record_transaction(const Transaction &transaction, DynamicArray<Transaction> &transactions);
 
 void add_new_transaction(DynamicArray<Transaction> &transList);
 

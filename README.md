@@ -6,15 +6,19 @@ A lightweight, high-performance command-line interface (CLI) application for per
 
 ## ✨ Features
 
-* **Custom Memory Management:** Implements a generic, template-based `DynamicArray<T>` structure with manual memory handling (`new`/`delete`) and deep-copy semantics.
+* **Custom Memory Management:** Uses the existing template-based `DynamicArray<T>` with manual memory handling (`new[]`/`delete[]`). Pass arrays by reference; do not copy them by value.
 * **Wallet Management:** Create, update, rename, and delete wallets with custom tracking IDs and balance updates.
-* **Income & Expense Tracking:** Categorize and record transactions seamlessly.
+* **Income & Expense Tracking:** Record transactions, update wallet balances, and retain history across restarts.
+* **Monthly Recurring Transactions:** Configure income or expenses with a start date and optional end date. Eligible entries are generated once per month at startup or after configuration.
+* **Recurring Module Guide:** See [docs/RecurringTransactions.md](docs/RecurringTransactions.md) for data fields, function explanations, and testing instructions.
 * **User-Friendly CLI:** Interact with core entities using intuitive names while keeping robust unique IDs under the hood.
 * **Safe Input Handling:** Robust input buffer management to prevent stream locking and infinite loops during user interactions.
 
 ---
 
 ## 📂 Project Structure
+
+Recurring transaction files are implemented. `Statistics.h` and `Statistics.cpp` are planned and do not exist yet.
 
 ```text
 Personal_Finance_Manager/
@@ -45,15 +49,14 @@ Personal_Finance_Manager/
 ## 🛠️ Running the Program
 
 ### Prerequisites
-* A C++ compiler supporting **C++11** or higher (e.g., `g++`, `clang++`, or MSVC).
+* A C++ compiler supporting **C++17** or higher (e.g., `g++`, `clang++`, or MSVC).
 
 ### Compilation & Execution (Bash Commands)
 Open your terminal in the root directory of the project and run the following bash commands to compile and execute the program:
 
-```
-bash
+```bash
 # Compile all source files together and include the header path
-g++ -std=c++11 src/*.cpp -Iinclude -o FinanceManager
+g++ -std=c++17 src/*.cpp -Iinclude -o FinanceManager
 
 # Run the executable:
 # On Linux / macOS:

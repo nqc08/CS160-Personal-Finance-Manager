@@ -11,7 +11,7 @@ using namespace std;
 
 DynamicArray<Transaction> transList;
 
-void add_new_transaction(DynamicArray<Transaction> &) {
+void add_new_transaction(DynamicArray<Transaction> &transactions) {
     clearScreen();
     cout << separate;
     cout << "CREATE A NEW TRANSACTION\n";
@@ -29,7 +29,7 @@ void add_new_transaction(DynamicArray<Transaction> &) {
         return;
     }
     Transaction t = op == 1 ? create_Income_Transaction() : create_Expense_Transaction();
-    if (!record_transaction(t)) {
+    if (!record_transaction(t, transactions)) {
         cout << "Invalid date, amount, wallet, or source/category.\n";
         return;
     }
@@ -162,13 +162,13 @@ int compare_dates(const Date &a, const Date &b) {
     return 0;
 }
 
-bool record_transaction(const Transaction &t) {
+bool record_transaction(const Transaction &t, DynamicArray<Transaction> &transactions) {
     if (!is_valid_date(t.date) || t.amount <= 0) return false;
     int wallet = find_index_by_ID(walletList, t.walletID);
     int source = t.isIncome ? find_index_by_ID(inSource, t.srcID)
                             : find_index_by_ID(expCategory, t.srcID);
     if (wallet == -1 || source == -1) return false;
-    transList.push_back(t);
+    transactions.push_back(t);
     if (t.isIncome) walletList[wallet].balance += t.amount;
     else walletList[wallet].balance -= t.amount;
     return true;
