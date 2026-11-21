@@ -11,7 +11,7 @@ using namespace std;
 
 DynamicArray<Transaction> transList;
 
-void add_new_transaction(DynamicArray<Transaction> &transList) {
+void add_new_transaction(DynamicArray<Transaction> &) {
     clearScreen();
     cout << separate;
     cout << "CREATE A NEW TRANSACTION\n";
@@ -20,8 +20,19 @@ void add_new_transaction(DynamicArray<Transaction> &transList) {
     cout << "2. Expense Transaction\n";
     cout << "Choose your option: ";
     int op; cin >> op;
-    if(op == 1) transList.push_back(create_Income_Transaction());
-    else transList.push_back(create_Expense_Transaction());
+    if (op != 1 && op != 2) {
+        cout << "Invalid option.\n";
+        return;
+    }
+    if (walletList.size == 0 || (op == 1 ? inSource.size == 0 : expCategory.size == 0)) {
+        cout << "Create a wallet and an income source or expense category first.\n";
+        return;
+    }
+    Transaction t = op == 1 ? create_Income_Transaction() : create_Expense_Transaction();
+    if (!record_transaction(t)) {
+        cout << "Invalid date, amount, wallet, or source/category.\n";
+        return;
+    }
 
     cout << "CREATE A NEW TRANSACTION: SUCCESS\n";
     cout << separate;
@@ -54,7 +65,7 @@ Transaction create_Income_Transaction() {
     t.walletID = walletList[idx].id;
 
     cout << "Input the amount of money: "; cin >> t.amount;
-    walletList[idx].balance += t.amount;
+
     
     cout << "Description: ";
     cin.ignore(); getline(cin, t.note);
@@ -89,7 +100,7 @@ Transaction create_Expense_Transaction() {
     t.walletID = walletList[idx].id;
 
     cout << "Input the amount of money: "; cin >> t.amount;
-    walletList[idx].balance -= t.amount;
+
     
     cout << "Description: ";
     cin.ignore(); getline(cin, t.note);
@@ -115,15 +126,15 @@ void show_transaction_history(const DynamicArray<Transaction> &transList) {
         
         if(t.isIncome) {
             int idx = find_index_by_ID(inSource, t.srcID);
-            cout << "Income Source: " << inSource[idx].name << '\n';
+            cout << "Income Source: " << (idx == -1 ? "[Deleted] " + t.srcID : inSource[idx].name) << '\n';
         }
         else {
             int idx = find_index_by_ID(expCategory, t.srcID);
-            cout << "Expense Category: " << expCategory[idx].name << '\n';
+            cout << "Expense Category: " << (idx == -1 ? "[Deleted] " + t.srcID : expCategory[idx].name) << '\n';
         }
         
         int idx = find_index_by_ID(walletList, t.walletID);
-        cout << "Wallet: " << walletList[idx].name << ' ';
+        cout << "Wallet: " << (idx == -1 ? "[Deleted] " + t.walletID : walletList[idx].name) << ' ';
         if(t.isIncome) cout << '+' << t.amount << '\n';
         else cout << '-' << t.amount << '\n';
         
@@ -134,4 +145,31 @@ void show_transaction_history(const DynamicArray<Transaction> &transList) {
 
     cout << "DISPLAY ALL TRANSACTIONS: SUCCESS\n";
     cout << separate;
+}
+
+bool is_valid_date(const Date &date) {
+    if (date.y < 1 || date.m < 1 || date.m > 12 || date.d < 1) return false;
+    int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    bool leap = date.y % 400 == 0 || (date.y % 4 == 0 && date.y % 100 != 0);
+    if (leap) days[1] = 29;
+    return date.d <= days[date.m - 1];
+}
+
+int compare_dates(const Date &a, const Date &b) {
+    if (a.y != b.y) return a.y < b.y ? -1 : 1;
+    if (a.m != b.m) return a.m < b.m ? -1 : 1;
+    if (a.d != b.d) return a.d < b.d ? -1 : 1;
+    return 0;
+}
+
+bool record_transaction(const Transaction &t) {
+    if (!is_valid_date(t.date) || t.amount <= 0) return false;
+    int wallet = find_index_by_ID(walletList, t.walletID);
+    int source = t.isIncome ? find_index_by_ID(inSource, t.srcID)
+                            : find_index_by_ID(expCategory, t.srcID);
+    if (wallet == -1 || source == -1) return false;
+    transList.push_back(t);
+    if (t.isIncome) walletList[wallet].balance += t.amount;
+    else walletList[wallet].balance -= t.amount;
+    return true;
 }
