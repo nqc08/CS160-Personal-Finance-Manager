@@ -114,6 +114,7 @@ void display_wallets(const DynamicArray<Wallet> &walletList) {
     for(int i = 0; i < walletList.size; i++) {
         const Wallet &w = walletList[i];
         cout << i + 1 << ". " << w.name << " (ID: " << w.id << ") - Balance: " << w.balance << '\n';
+        cout << '\n';
     }
 
     cout << "DISPLAY ALL WALLET: SUCCESS\n";

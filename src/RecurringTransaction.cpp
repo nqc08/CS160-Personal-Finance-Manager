@@ -2,6 +2,7 @@
 #include "../include/Wallet.h"
 #include "../include/Income.h"
 #include "../include/Expense.h"
+#include "../include/display.h"
 #include <ctime>
 #include <iostream>
 #include <limits>
@@ -55,7 +56,9 @@ int process_recurring_transactions(const Date &today) {
 
 // Each action returns to the dashboard. No extra edit/delete features are required.
 void recurring_menu() {
-    cout << "\nRECURRING TRANSACTIONS\n1. Add monthly transaction\n2. View recurring transactions\n0. Back\nChoose: ";
+    clearScreen();
+    cout << separate;
+    cout << "RECURRING TRANSACTIONS\n1. Add monthly transaction\n2. View recurring transactions\n0. Back\nChoose: ";
     int option;
     if (!(cin >> option)) {
         cin.clear();
@@ -65,7 +68,14 @@ void recurring_menu() {
     }
     if (option == 0) return;
     if (option == 2) {
-        if (recurringList.size == 0) cout << "No recurring transactions.\n";
+        clearScreen();
+        cout << separate;
+        cout << "DISPLAY ALL RECURRING TRANSACTIONS\n";
+        if (recurringList.size == 0) {
+            cout << "No recurring transactions.\n";
+            cout << separate;
+            return;
+        }
         for (int i = 0; i < recurringList.size; i++) {
             const RecurringTransaction &r = recurringList[i];
             const Transaction &t = r.transaction;
@@ -80,10 +90,15 @@ void recurring_menu() {
             if (r.hasEndDate) cout << " | End: " << r.endDate.d << '/' << r.endDate.m << '/' << r.endDate.y;
             else cout << " | No end date";
             cout << " | Last generated: " << r.lastGeneratedMonth << '/' << r.lastGeneratedYear << '\n';
+            cout << '\n';
         }
+        cout << separate;
         return;
     }
     if (option != 1) { cout << "Invalid option.\n"; return; }
+    clearScreen();
+    cout << separate;
+    cout << "ADD MONTHLY TRANSACTION\n";
     RecurringTransaction r;
     int type, end;
     string walletName, sourceName;
@@ -130,4 +145,5 @@ void recurring_menu() {
     }
     if (add_recurring_transaction(r)) cout << "Recurring transaction added.\n";
     else cout << "Not added: check ID uniqueness, positive amount, and valid start/end dates.\n";
+    cout << separate;
 }

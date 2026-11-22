@@ -113,6 +113,7 @@ void display_category(const DynamicArray<ExpenseCategory> &expCategory) {
     for(int i = 0; i < expCategory.size; i++) {
         const ExpenseCategory &s = expCategory[i];
         cout << i + 1 << ". " << s.name << " (ID: " << s.id << ")\n";
+        cout << '\n';
     }
 
     cout << "DISPLAY ALL EXPENSE CATEGORIES: SUCCESS\n";

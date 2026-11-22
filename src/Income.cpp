@@ -113,6 +113,7 @@ void display_source(const DynamicArray<IncomeSource> &inSource) {
     for(int i = 0; i < inSource.size; i++) {
         const IncomeSource &s = inSource[i];
         cout << i + 1 << ". " << s.name << " (ID: " << s.id << ")\n";
+        cout << '\n';
     }
 
     cout << "DISPLAY ALL INCOME SOURCES: SUCCESS\n";

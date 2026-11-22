@@ -78,123 +78,116 @@ int main() {
         if(op == 0) break;
 
         if(op == 1) {
-            while(true) {
-                menuWallet();
+            menuWallet();
 
-                int opWallet; 
-                cout << "Choose your option: "; cin >> opWallet;
+            int opWallet; 
+            cout << "Choose your option: "; cin >> opWallet;
 
-                if(opWallet == 0) break;
+            if(opWallet == 0) continue;
 
-                switch (opWallet) {
-                    case 1: 
-                        add_new_wallet(walletList);
-                        saveCurrentData();
-                        ENTER(1);
-                        break;
-                    case 2: 
-                        rename_wallet(walletList);
-                        saveCurrentData();
-                        ENTER(0);
-                        break; 
-                    case 3: 
-                        delete_wallet(walletList);
-                        saveCurrentData();
-                        ENTER(0);
-                        break;
-                    case 4:
-                        display_wallets(walletList);
-                        ENTER(1);
-                        break;
-                }
+            switch (opWallet) {
+                case 1: 
+                    add_new_wallet(walletList);
+                    saveCurrentData();
+                    ENTER(1);
+                    break;
+                case 2: 
+                    rename_wallet(walletList);
+                    saveCurrentData();
+                    ENTER(0);
+                    break; 
+                case 3: 
+                    delete_wallet(walletList);
+                    saveCurrentData();
+                    ENTER(0);
+                    break;
+                case 4:
+                    display_wallets(walletList);
+                    ENTER(1);
+                    break;
             }
         }
 
         if(op == 2) {
-            while(true) {
-                menuIncomeSource();
+            menuIncomeSource();
 
-                int opSrc;
-                cout << "Choose your option: "; cin >> opSrc;
+            int opSrc;
+            cout << "Choose your option: "; cin >> opSrc;
 
-                if(opSrc == 0) break;
+            if(opSrc == 0) continue;
 
-                switch (opSrc) {
-                    case 1:
-                        add_new_source(inSource);
-                        saveCurrentData();
-                        ENTER(0);
-                        break; 
-                    case 2:
-                        rename_source(inSource);
-                        saveCurrentData();
-                        ENTER(0);
-                        break; 
-                    case 3:
-                        delete_source(inSource);
-                        saveCurrentData();
-                        ENTER(0);
-                        break;
-                    case 4:
-                        display_source(inSource);
-                        ENTER(1);
-                        break;
-                }
+            switch (opSrc) {
+                case 1:
+                    add_new_source(inSource);
+                    saveCurrentData();
+                    ENTER(0);
+                    break; 
+                case 2:
+                    rename_source(inSource);
+                    saveCurrentData();
+                    ENTER(0);
+                    break; 
+                case 3:
+                    delete_source(inSource);
+                    saveCurrentData();
+                    ENTER(0);
+                    break;
+                case 4:
+                    display_source(inSource);
+                    ENTER(1);
+                    break;
             }
         }
 
         if(op == 3) {
-            while(true) {
-                menuExpenseCategory();
+            menuExpenseCategory();
 
-                int opCate;
-                cout << "Choose your option: "; cin >> opCate;
+            int opCate;
+            cout << "Choose your option: "; cin >> opCate;
 
-                if(opCate == 0) break;
+            if(opCate == 0) continue;
 
-                switch (opCate) {
-                    case 1:
-                        add_new_category(expCategory);
-                        saveCurrentData();
-                        ENTER(0);
-                        break; 
-                    case 2: 
-                        rename_category(expCategory);
-                        saveCurrentData();
-                        ENTER(0);
-                        break; 
-                    case 3:
-                        delete_category(expCategory);
-                        saveCurrentData();
-                        ENTER(0);
-                        break;
-                    case 4: 
-                        display_category(expCategory);
-                        ENTER(1);
-                        break;
-                }
+            switch (opCate) {
+                case 1:
+                    add_new_category(expCategory);
+                    saveCurrentData();
+                    ENTER(0);
+                    break; 
+                case 2: 
+                    rename_category(expCategory);
+                    saveCurrentData();
+                    ENTER(0);
+                    break; 
+                case 3:
+                    delete_category(expCategory);
+                    saveCurrentData();
+                    ENTER(0);
+                    break;
+                case 4: 
+                    display_category(expCategory);
+                    ENTER(1);
+                    break;
             }
         }
 
         if(op == 4) {
-            while(true) {
-                menuTransaction();
+            menuTransaction();
 
-                int opTrans;
-                cout << "Choose your option: "; cin >> opTrans;
+            int opTrans;
+            cout << "Choose your option: "; cin >> opTrans;
 
-                if(opTrans == 0) break;
+            if(opTrans == 0) continue;
 
-                switch (opTrans) {
-                    case 1:
-                        add_new_transaction(transList);
-                        if (!saveCurrentData()) return 1;
-                        ENTER(0);
-                        break;
-                    case 2: show_transaction_history(transList); ENTER(1); break;
-                }
+            switch (opTrans) {
+                case 1:
+                    add_new_transaction(transList);
+                    if (!saveCurrentData()) return 1;
+                    ENTER(0);
+                    break;
+                case 2: show_transaction_history(transList); ENTER(1); break;
             }
         }
+
         if (op == 5) {
             recurring_menu();
             int added = process_recurring_transactions(current_date());
