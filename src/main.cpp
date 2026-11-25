@@ -6,6 +6,7 @@
 #include "../include/Transaction.h"
 #include "../include/Storage.h"
 #include "../include/RecurringTransaction.h"
+#include "../include/Statistics.h"
 #include <limits>
 
 #include<iostream>
@@ -194,6 +195,9 @@ int main() {
             if (!saveCurrentData()) return 1;
             if (added > 0) cout << "Created " << added << " recurring transaction(s).\n";
             ENTER(1);
+        }
+        if (op == 6){
+            statistics_menu();
         }
     }
 
