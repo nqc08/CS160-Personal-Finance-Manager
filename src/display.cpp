@@ -88,3 +88,12 @@ void menuTransaction() {
     cout << "2. Show transaction history\n";
     cout << separate;
 }
+void menuStatistics() {
+    clearScreen();
+    cout << separate;
+    cout << "STATISTICS & REPORTING\n";
+    cout << "0. Dashboard\n";
+    cout << "1. Time_based Statistics\n";
+    cout << "2. Time & Wallet-based Statistics\n";
+    cout << separate;
+}

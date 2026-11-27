@@ -197,7 +197,30 @@ int main() {
             ENTER(1);
         }
         if (op == 6){
-            statistics_menu();
+            menuStatistics();
+            cout << "Choose your option: ";
+        
+            int opStats;
+            if (!(cin >> opStats)){
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input.\n";
+                continue;
+            }
+
+            switch (opStats){
+                case 0: break;
+                case 1: 
+                    show_time_stats(); 
+                    break;
+                case 2:
+                    show_wallet_stats();
+                    break;
+                default:
+                    cout << "Invalid option.\n";
+                    ENTER(1);
+                    break;
+            }
         }
     }
 
