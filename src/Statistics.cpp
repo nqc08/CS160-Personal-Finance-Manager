@@ -142,3 +142,51 @@ void show_wallet_stats(){
     cout << separate;
     ENTER(0);
 }
+void show_years_overview()
+{
+    DynamicArray<int> years;
+    cout << "Input years, separated by spaces (e.g 2025 2026): ";
+    int y; bool check_input = 0;
+    while(cin >> y){
+        check_input = 1;
+        if (y < 1){
+            check_input = 0;
+            break;
+        }
+        bool exist = 0;
+        for (long i = 0; i < years.size; i++){
+            if (years[i] == y) exist = 1;
+        }
+        if (!exist) years.push_back(y);
+        while (cin.peek() == ' ' || cin.peek() == '\t') cin.get();
+        if (cin.peek() == '\n'){
+            cin.get();
+            break;
+        }
+    }
+    if (!check_input){
+        clear_line;
+        cout << "Invalid year\n";
+        ENTER(0);
+        return;
+    }
+    
+    PeriodSummary all;
+    cout << separate;
+    for (int i = 0; i < years.size; i++){
+        PeriodSummary tmp = calculate_time_stats(transList, Date(1, 1, years[i]), Date(31, 12, years[i]));
+        all.totalIncome += tmp.totalIncome;
+        all.totalExpense += tmp.totalExpense;
+        cout << "Year " << years[i] << ": \n";
+        print_summary(tmp);
+        cout << separate;
+    }
+    if (years.size > 1){
+        all.netBalance = all.totalIncome - all.totalExpense;
+        cout << "ALL SELECTED YEARS\n";
+        print_summary(all);
+        cout << separate;
+    }
+
+    ENTER(false);
+}

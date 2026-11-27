@@ -216,6 +216,9 @@ int main() {
                 case 2:
                     show_wallet_stats();
                     break;
+                case 3:
+                    show_years_overview();
+                    break;
                 default:
                     cout << "Invalid option.\n";
                     ENTER(1);

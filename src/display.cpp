@@ -95,5 +95,6 @@ void menuStatistics() {
     cout << "0. Dashboard\n";
     cout << "1. Time_based Statistics\n";
     cout << "2. Time & Wallet-based Statistics\n";
+    cout << "3. Years-based Overview\n";
     cout << separate;
 }
