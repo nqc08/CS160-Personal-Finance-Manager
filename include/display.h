@@ -16,6 +16,8 @@ void menuExpenseCategory();
 
 void menuTransaction();
 
+void menuStatistics();
+
 void clearScreen();
 
 void ENTER(bool needIgnore);
