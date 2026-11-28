@@ -4,6 +4,7 @@
 
 #include<iostream>
 #include<string>
+#include<limits>
 using namespace std;
 
 DynamicArray<IncomeSource> inSource;
@@ -14,8 +15,14 @@ void add_new_source(DynamicArray<IncomeSource> &inSource) {
     cout << "CREATE A NEW INCOME SOURCE\n";
 
     IncomeSource s;
-    cout << "Input source's ID: "; cin >> s.id;
     cin.ignore();
+    while(true) {
+        cout << "Input source's ID: "; getline(cin, s.id);
+        if(find_index_by_ID(inSource, s.id) == -1) break;
+
+        cout << "ID existed, please choose another ID!\n";
+    }
+    
     while(true) {
         cout << "Input a source's Name: "; getline(cin, s.name);
         if(find_index_by_name(inSource, s.name) == -1) break;
@@ -33,6 +40,12 @@ void rename_source(DynamicArray<IncomeSource> &inSource) {
     clearScreen();
     cout << separate;
     cout << "RENAME AN INCOME SOURCE\n";
+
+    if(inSource.size == 0) {
+        cout << "There is no source\n";
+        cout << separate;
+        return;
+    }
 
     string name;
     cin.ignore();

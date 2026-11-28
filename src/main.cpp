@@ -11,6 +11,7 @@
 
 #include<iostream>
 #include<string>
+#include<limits>
 using namespace std;
 
 int main() {
@@ -69,10 +70,12 @@ int main() {
 
         int op; 
         cout << "Choose your option: ";
-        if (!(cin >> op)) {
+        if (!(cin >> op) || op < 0 || op > 6) {
             if (cin.eof()) break;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid option\n";
+            ENTER(0);
             continue;
         }
         
@@ -82,11 +85,18 @@ int main() {
             menuWallet();
 
             int opWallet; 
-            cout << "Choose your option: "; cin >> opWallet;
-
-            if(opWallet == 0) continue;
+            cout << "Choose your option: "; 
+            if (!(cin >> opWallet)) {
+                if (cin.eof()) break;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid option\n";
+                ENTER(0);
+                continue;
+            }
 
             switch (opWallet) {
+                case 0: break;
                 case 1: 
                     add_new_wallet(walletList);
                     saveCurrentData();
@@ -106,6 +116,10 @@ int main() {
                     display_wallets(walletList);
                     ENTER(1);
                     break;
+                default: 
+                    cout << "Invalid option\n";
+                    ENTER(1);
+                    break;
             }
         }
 
@@ -113,11 +127,18 @@ int main() {
             menuIncomeSource();
 
             int opSrc;
-            cout << "Choose your option: "; cin >> opSrc;
-
-            if(opSrc == 0) continue;
+            cout << "Choose your option: ";
+            if (!(cin >> opSrc)) {
+                if (cin.eof()) break;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid option\n";
+                ENTER(0);
+                continue;
+            }
 
             switch (opSrc) {
+                case 0: break;
                 case 1:
                     add_new_source(inSource);
                     saveCurrentData();
@@ -137,6 +158,10 @@ int main() {
                     display_source(inSource);
                     ENTER(1);
                     break;
+                default: 
+                    cout << "Invalid option\n";
+                    ENTER(1);
+                    break;
             }
         }
 
@@ -144,11 +169,18 @@ int main() {
             menuExpenseCategory();
 
             int opCate;
-            cout << "Choose your option: "; cin >> opCate;
-
-            if(opCate == 0) continue;
+            cout << "Choose your option: ";
+            if (!(cin >> opCate)) {
+                if (cin.eof()) break;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid option\n";
+                ENTER(0);
+                continue;
+            }
 
             switch (opCate) {
+                case 0: break;
                 case 1:
                     add_new_category(expCategory);
                     saveCurrentData();
@@ -168,6 +200,10 @@ int main() {
                     display_category(expCategory);
                     ENTER(1);
                     break;
+                default: 
+                    cout << "Invalid option\n";
+                    ENTER(1);
+                    break;
             }
         }
 
@@ -175,17 +211,31 @@ int main() {
             menuTransaction();
 
             int opTrans;
-            cout << "Choose your option: "; cin >> opTrans;
-
-            if(opTrans == 0) continue;
+            cout << "Choose your option: ";
+            if (!(cin >> opTrans)) {
+                if (cin.eof()) break;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid option\n";
+                ENTER(0);
+                continue;
+            }
 
             switch (opTrans) {
+                case 0: break;
                 case 1:
                     add_new_transaction(transList);
                     if (!saveCurrentData()) return 1;
                     ENTER(0);
                     break;
-                case 2: show_transaction_history(transList); ENTER(1); break;
+                case 2: 
+                    show_transaction_history(transList); 
+                    ENTER(1); 
+                    break;
+                default: 
+                    cout << "Invalid option\n";
+                    ENTER(1);
+                    break;
             }
         }
 
@@ -196,6 +246,7 @@ int main() {
             if (added > 0) cout << "Created " << added << " recurring transaction(s).\n";
             ENTER(1);
         }
+
         if (op == 6){
             menuStatistics();
             cout << "Choose your option: ";
@@ -204,7 +255,8 @@ int main() {
             if (!(cin >> opStats)){
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Invalid input.\n";
+                cout << "Invalid option.\n";
+                ENTER(0);
                 continue;
             }
 

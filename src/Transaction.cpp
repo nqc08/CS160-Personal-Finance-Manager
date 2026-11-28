@@ -7,6 +7,7 @@
 
 #include<iostream>
 #include<string>
+#include<limits>
 using namespace std;
 
 DynamicArray<Transaction> transList;
@@ -19,11 +20,15 @@ void add_new_transaction(DynamicArray<Transaction> &transactions) {
     cout << "1. Income Transaction\n";
     cout << "2. Expense Transaction\n";
     cout << "Choose your option: ";
-    int op; cin >> op;
-    if (op != 1 && op != 2) {
-        cout << "Invalid option.\n";
+    int op;
+    if (!(cin >> op) || (op != 1 && op != 2)) {
+        if (cin.eof()) return;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid option\n";
         return;
     }
+
     if (walletList.size == 0 || (op == 1 ? inSource.size == 0 : expCategory.size == 0)) {
         cout << "Create a wallet and an income source or expense category first.\n";
         return;
@@ -64,9 +69,18 @@ Transaction create_Income_Transaction() {
     }
     t.walletID = walletList[idx].id;
 
-    cout << "Input the amount of money: "; cin >> t.amount;
+    while(true) {
+        cout << "Input the amount of money: "; 
+        if(!(cin >> t.amount) || t.amount < 0) {
+            if (cin.eof()) break;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "The amount of money must be a non-negative integer\n";
+            continue;
+        }
+        break;
+    }
 
-    
     cout << "Description: ";
     cin.ignore(); getline(cin, t.note);
 
@@ -99,8 +113,17 @@ Transaction create_Expense_Transaction() {
     }
     t.walletID = walletList[idx].id;
 
-    cout << "Input the amount of money: "; cin >> t.amount;
-
+    while(true) {
+        cout << "Input the amount of money: "; 
+        if(!(cin >> t.amount) || t.amount < 0) {
+            if (cin.eof()) break;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "The amount of money must be a non-negative integer\n";
+            continue;
+        }
+        break;
+    }
     
     cout << "Description: ";
     cin.ignore(); getline(cin, t.note);

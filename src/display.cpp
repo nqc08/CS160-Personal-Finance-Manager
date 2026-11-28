@@ -3,6 +3,7 @@
 
 #include<iostream>
 #include<string>
+#include<limits>
 using namespace std;
 
 string separate = "---------------------------------------------------------------------------------\n";
@@ -12,7 +13,7 @@ void clearScreen() {
 }
 
 void ENTER(bool needIgnore) {
-    if(needIgnore) cin.ignore(); 
+    if(needIgnore) cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
     cout << "ENTER to continue";
     cin.get(); 
 }

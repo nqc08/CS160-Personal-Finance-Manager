@@ -4,6 +4,7 @@
 
 #include<iostream>
 #include<string>
+#include<limits>
 using namespace std;
 
 DynamicArray<ExpenseCategory> expCategory;
@@ -14,8 +15,14 @@ void add_new_category(DynamicArray<ExpenseCategory> &expCategory) {
     cout << "CREATE A NEW EXPENSE CATEGORY\n";
 
     ExpenseCategory s;
-    cout << "Input category's ID: "; cin >> s.id;
     cin.ignore();
+    while(true) {
+        cout << "Input source's ID: "; getline(cin, s.id);
+        if(find_index_by_ID(expCategory, s.id) == -1) break;
+
+        cout << "ID existed, please choose another ID!\n";
+    }
+
     while(true) {
         cout << "Input a category's Name: "; getline(cin, s.name);
         if(find_index_by_name(expCategory, s.name) == -1) break;
@@ -33,6 +40,12 @@ void rename_category(DynamicArray<ExpenseCategory> &expCategory) {
     clearScreen();
     cout << separate;
     cout << "RENAME AN EXPENSE CATEGORY\n";
+
+    if(expCategory.size == 0) {
+        cout << "There is no category\n";
+        cout << separate;
+        return;
+    }
 
     string name;
     cin.ignore();

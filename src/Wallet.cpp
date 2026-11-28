@@ -4,6 +4,7 @@
 
 #include<iostream>
 #include<string>
+#include<limits>
 using namespace std;
 
 DynamicArray<Wallet> walletList;
@@ -14,15 +15,32 @@ void add_new_wallet(DynamicArray<Wallet> &walletList) {
     cout << "CREATE A NEW WALLET\n";
 
     Wallet w;
-    cout << "Input wallet's ID: "; cin >> w.id;
     cin.ignore();
+    while(true) {
+        cout << "Input wallet's ID: "; getline(cin, w.id);
+        if(find_index_by_ID(walletList, w.id) == -1) break;
+
+        cout << "ID existed, please choose another ID!\n";
+    }
+
     while(true) {
         cout << "Input a wallet's Name: "; getline(cin, w.name);
         if(find_index_by_name(walletList, w.name) == -1) break;
 
         cout << "Name existed, please choose another Name!\n";
     }
-    cout << "Input initial balance: "; cin >> w.balance;
+
+    while(true) {
+        cout << "Input initial balance: "; 
+        if (!(cin >> w.balance) || w.balance < 0) {
+            if (cin.eof()) break;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid balance\n";
+            continue;
+        }
+        break;
+    }
 
     walletList.push_back(w);
 
@@ -34,6 +52,12 @@ void rename_wallet(DynamicArray<Wallet> &walletList) {
     clearScreen();
     cout << separate;
     cout << "RENAME A WALLET\n";
+
+    if(walletList.size == 0) {
+        cout << "There is no wallet\n";
+        cout << separate;
+        return;
+    }
 
     string name;
     cin.ignore();
