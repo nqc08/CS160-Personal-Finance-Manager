@@ -219,6 +219,12 @@ int main() {
                 case 3:
                     show_years_overview();
                     break;
+                case 4:
+                    show_income_breakdown();
+                    break;
+                case 5:
+                    show_expense_breakdown();
+                    break;
                 default:
                     cout << "Invalid option.\n";
                     ENTER(1);

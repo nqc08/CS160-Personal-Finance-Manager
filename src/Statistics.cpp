@@ -1,6 +1,8 @@
 #include "../include/Statistics.h"
 #include "../include/display.h"
 #include "../include/Wallet.h"
+#include "../include/Income.h"
+#include "../include/Expense.h"
 #include <iostream>
 #include <limits>
 using namespace std;
@@ -10,6 +12,28 @@ static bool is_in_date_range(const Date &d, const Date &start, const Date &end){
 static void clear_line(){
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+bool read_years(DynamicArray<int> &years){
+    cout << "Input years, separated by spaces (e.g 2025 2026): ";
+    int y; bool check_input = 0;
+    while(cin >> y){
+        check_input = 1;
+        if (y < 1){
+            check_input = 0;
+            break;
+        }
+        bool exist = 0;
+        for (long i = 0; i < years.size; i++){
+            if (years[i] == y) exist = 1;
+        }
+        if (!exist) years.push_back(y);
+        while (cin.peek() == ' ' || cin.peek() == '\t') cin.get();
+        if (cin.peek() == '\n'){
+            cin.get();
+            break;
+        }
+    }
+    return check_input;
 }
 void print_summary(PeriodSummary& s){
     cout << "Total Income: " << s.totalIncome << "\n";
@@ -144,33 +168,17 @@ void show_wallet_stats(){
 }
 void show_years_overview()
 {
+    clearScreen();
+    cout << separate;
+    cout << "YEAR-BASED OVERVIEW\n";
+
     DynamicArray<int> years;
-    cout << "Input years, separated by spaces (e.g 2025 2026): ";
-    int y; bool check_input = 0;
-    while(cin >> y){
-        check_input = 1;
-        if (y < 1){
-            check_input = 0;
-            break;
-        }
-        bool exist = 0;
-        for (long i = 0; i < years.size; i++){
-            if (years[i] == y) exist = 1;
-        }
-        if (!exist) years.push_back(y);
-        while (cin.peek() == ' ' || cin.peek() == '\t') cin.get();
-        if (cin.peek() == '\n'){
-            cin.get();
-            break;
-        }
-    }
-    if (!check_input){
+    if (!read_years(years)){
         clear_line;
-        cout << "Invalid year\n";
+        cout << "Invalid year.\n";
         ENTER(0);
         return;
     }
-    
     PeriodSummary all;
     cout << separate;
     for (int i = 0; i < years.size; i++){
@@ -189,4 +197,88 @@ void show_years_overview()
     }
 
     ENTER(false);
+}
+void show_income_breakdown()
+{
+    clearScreen();
+    cout << separate;
+    cout << "ANNUAL INCOME BREAKDOWN.\n";
+
+    DynamicArray<int> years;
+    if (!read_years(years)){
+        clear_line(); 
+        cout << "Invalid years.\n";
+        ENTER(0);
+        return;
+    } 
+    DynamicArray<int> totals;
+    for(int i = 0; i < inSource.size; i++) {
+        totals[i] = 0;
+    }
+    long long all = 0, grand = 0;
+    for (long i = 0; i < transList.size; i++){
+        Transaction t = transList[i];
+        bool checkyears = 0;
+        for (int j = 0; j < years.size; j++){
+            if (t.date.y == years[j]) checkyears = 1;
+        }
+        int source = find_index_by_ID(inSource, t.srcID);
+        if (!t.isIncome || !checkyears) continue;
+        all += t.amount;
+        if (source == -1) continue;
+        totals[source] += t.amount;
+        grand += t.amount;
+    }
+    cout << separate;
+    cout << "Years: "; for (long i = 0; i < years.size - 1; i++) cout << years[i] << ", ";
+    cout << years[years.size-1] << "\n";
+    cout << "TOTAL INCOME: " << all << "\n";
+    for (long i = 0; i < inSource.size; i++){
+        cout << " " << inSource[i].name << "(ID: " << inSource[i].id << ")" << ": " << totals[i] << "\n";
+    }
+    if (all != grand) cout << "  [Deleted source]: " << all - grand << "\n";
+    cout << separate;
+    ENTER(0);
+}
+void show_expense_breakdown()
+{
+    clearScreen();
+    cout << separate;
+    cout << "ANNUAL EXPENSE BREAKDOWN.\n";
+
+    DynamicArray<int> years;
+    if (!read_years(years)){
+        clear_line(); 
+        cout << "Invalid years.\n";
+        ENTER(0);
+        return;
+    } 
+    DynamicArray<int> totals;
+    for(int i = 0; i < expCategory.size; i++) {
+        totals[i] = 0;
+    }
+    long long all = 0, grand = 0;
+    for (long i = 0; i < transList.size; i++){
+        Transaction t = transList[i];
+        bool checkyears = 0;
+        for (int j = 0; j < years.size; j++){
+            if (t.date.y == years[j]) checkyears = 1;
+        }
+        int source = find_index_by_ID(expCategory, t.srcID);
+        if (t.isIncome || !checkyears) continue;
+        all += t.amount;
+        if (source == -1) continue;
+        totals[source] += t.amount;
+        grand += t.amount;
+    }
+    cout << separate;
+    cout << "Years: "; for (long i = 0; i < years.size - 1; i++) cout << years[i] << ", ";
+    cout << years[years.size-1] << "\n";
+    cout << "TOTAL EXPENSE: " << all << "\n";
+    for (long i = 0; i < expCategory.size; i++){
+        cout << " " << expCategory[i].name << "(ID: " << expCategory[i].id << ")" << ": " << totals[i] << "\n";
+    }
+    if (all != grand) cout << "  [Deleted source]: " << all - grand << "\n";
+    cout << separate;
+    ENTER(0);
 }
