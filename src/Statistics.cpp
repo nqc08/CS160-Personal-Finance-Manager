@@ -264,11 +264,11 @@ void show_expense_breakdown()
         for (int j = 0; j < years.size; j++){
             if (t.date.y == years[j]) checkyears = 1;
         }
-        int source = find_index_by_ID(expCategory, t.srcID);
+        int category = find_index_by_ID(expCategory, t.srcID);
         if (t.isIncome || !checkyears) continue;
         all += t.amount;
-        if (source == -1) continue;
-        totals[source] += t.amount;
+        if (category == -1) continue;
+        totals[category] += t.amount;
         grand += t.amount;
     }
     cout << separate;
@@ -278,7 +278,7 @@ void show_expense_breakdown()
     for (long i = 0; i < expCategory.size; i++){
         cout << " " << expCategory[i].name << "(ID: " << expCategory[i].id << ")" << ": " << totals[i] << "\n";
     }
-    if (all != grand) cout << "  [Deleted source]: " << all - grand << "\n";
+    if (all != grand) cout << "  [Deleted category]: " << all - grand << "\n";
     cout << separate;
     ENTER(0);
 }
