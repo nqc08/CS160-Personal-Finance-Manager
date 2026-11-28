@@ -33,6 +33,7 @@ bool read_years(DynamicArray<int> &years){
             break;
         }
     }
+    if (cin.fail()) return false;
     return check_input;
 }
 void print_summary(PeriodSummary& s){
@@ -90,12 +91,14 @@ bool read_date_range(Date& startDate, Date& endDate)
 {
     cout << "From date (dd mm yyyy): ";
     while (!(cin >> startDate.d >> startDate.m >> startDate.y) || !is_valid_date(startDate)){
+        if (cin.eof()) return 0;
         clear_line();
         cout << "\nInvalid start date. Please input the start date (dd mm yyyy) again: ";
     }
 
     cout << "To date (dd mm yyyy): ";
     while (!(cin >> endDate.d >> endDate.m >> endDate.y) || !is_valid_date(endDate)){
+        if (cin.eof()) return 0;
         clear_line();
         cout << "\nInvalid end date. Please input the end date (dd mm yyyy) again: ";
     }
@@ -139,7 +142,7 @@ void show_wallet_stats(){
     if (!read_date_range(startDate, endDate)) return;
     
     clear_line();
-    cout << "Input wallet's Name you want: ";
+    cout << "Input wallet's Name you want or Press Enter for all Wallets: ";
     string name;
     getline(cin, name);
     int only = -1;
@@ -174,7 +177,7 @@ void show_years_overview()
 
     DynamicArray<int> years;
     if (!read_years(years)){
-        clear_line;
+        clear_line();
         cout << "Invalid year.\n";
         ENTER(0);
         return;
@@ -212,9 +215,7 @@ void show_income_breakdown()
         return;
     } 
     DynamicArray<int> totals;
-    for(int i = 0; i < inSource.size; i++) {
-        totals[i] = 0;
-    }
+    for(int i = 0; i < inSource.size; i++) totals.push_back(0);
     long long all = 0, grand = 0;
     for (long i = 0; i < transList.size; i++){
         Transaction t = transList[i];
@@ -254,9 +255,7 @@ void show_expense_breakdown()
         return;
     } 
     DynamicArray<int> totals;
-    for(int i = 0; i < expCategory.size; i++) {
-        totals[i] = 0;
-    }
+    for(int i = 0; i < expCategory.size; i++) totals.push_back(0);
     long long all = 0, grand = 0;
     for (long i = 0; i < transList.size; i++){
         Transaction t = transList[i];
