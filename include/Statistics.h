@@ -21,4 +21,7 @@ void show_time_stats();
 bool read_date_range(Date& startDate, Date& endDate);
 void show_wallet_stats();
 void show_years_overview();
+bool read_years(DynamicArray<int> &years);
+void show_income_breakdown();
+void show_expense_breakdown();
 #endif
